@@ -296,16 +296,13 @@ const ExcelFilePage: React.FC = () => {
         });
         const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-        const response = await fetch(
-          `${baseUrl}/api/attendence/add-attendence-data`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(jsonData),
-          }
-        );
+        const response = await fetch(`/api/attendence/add-attendence-data`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(jsonData),
+        });
 
         if (response.ok) {
           Swal.fire({

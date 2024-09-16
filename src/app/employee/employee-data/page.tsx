@@ -68,7 +68,7 @@ const SalaryData: React.FC = () => {
       };
       const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-      fetch(`${baseUrl}/api/employee/add-employee`, {
+      fetch(`/api/employee/add-employee`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

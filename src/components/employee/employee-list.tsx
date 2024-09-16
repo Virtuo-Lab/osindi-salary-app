@@ -22,7 +22,7 @@ const EmployeeDataList: React.FC = () => {
 
   const fetchEmployeeList = async () => {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-    const response = await fetch(`${baseUrl}/api/employee/get-employee-list`);
+    const response = await fetch(`/api/employee/get-employee-list`);
     const data = await response.json();
     setEmployeeList(data);
   };

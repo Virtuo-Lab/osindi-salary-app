@@ -347,7 +347,7 @@ export default function CreateSalary() {
                 Create Salary
               </Heading>
               <Link href="/salary/excel-file">
-                <Button colorScheme="teal">CREATE SALARY</Button>
+                <Button colorScheme="teal">ADD ATTENDANCE DATA</Button>
               </Link>
             </div>
           </div>

@@ -90,17 +90,17 @@ const EmployeeDetails: React.FC = () => {
         const id = url.split("/").pop();
 
         const employeeResponse = await fetch(
-          `${baseUrl}/api/employee/get-employee/${id}`
+          `/api/employee/get-employee/${id}`
         );
         const employeeData = await employeeResponse.json();
 
         const allowancesResponse = await fetch(
-          `${baseUrl}/api/employee/allowance/get-allowances/${id}`
+          `/api/employee/allowance/get-allowances/${id}`
         );
         const allowancesData = await allowancesResponse.json();
 
         const deductionsResponse = await fetch(
-          `${baseUrl}/api/employee/deduction/get-deduction/${id}`
+          `/api/employee/deduction/get-deduction/${id}`
         );
         const deductionsData = await deductionsResponse.json();
 
@@ -135,7 +135,7 @@ const EmployeeDetails: React.FC = () => {
   const handleSaveClick = async () => {
     setModelLoading(true);
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-    const response = await fetch(`${baseUrl}/api/employee/update-employee`, {
+    const response = await fetch(`/api/employee/update-employee`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -185,21 +185,18 @@ const EmployeeDetails: React.FC = () => {
     setModelLoading(true);
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const id = employeeId;
-    const response = await fetch(
-      `${baseUrl}/api/employee/allowance/add-allowance`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          employeeId: id,
-          allowanceTitle: allowanceTitle,
-          amount: allowanceAmount,
-          activeStatus: allowanceIsActive,
-        }),
-      }
-    );
+    const response = await fetch(`/api/employee/allowance/add-allowance`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        employeeId: id,
+        allowanceTitle: allowanceTitle,
+        amount: allowanceAmount,
+        activeStatus: allowanceIsActive,
+      }),
+    });
 
     if (response.ok) {
       setIsAllowanceModalOpen(false);
@@ -217,21 +214,18 @@ const EmployeeDetails: React.FC = () => {
     setModelLoading(true);
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const id = employeeId;
-    const response = await fetch(
-      `${baseUrl}/api/employee/deduction/add-deduction`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          employeeId: id,
-          deductionTitle: deductionTitle,
-          amount: deductionAmount,
-          activeStatus: deductionIsActive,
-        }),
-      }
-    );
+    const response = await fetch(`/api/employee/deduction/add-deduction`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        employeeId: id,
+        deductionTitle: deductionTitle,
+        amount: deductionAmount,
+        activeStatus: deductionIsActive,
+      }),
+    });
 
     if (response.ok) {
       setIsDeductionModalOpen(false);
@@ -249,21 +243,18 @@ const EmployeeDetails: React.FC = () => {
   const handleEditAllowance = async (id: number) => {
     setModelLoading(true);
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-    const response = await fetch(
-      `${baseUrl}/api/employee/allowance/edit-allowance`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          allowanceId: id,
-          allowanceTitle: allowanceTitleEdit,
-          amount: allowanceAmountEdit,
-          activeStatus: allowanceIsActiveEdit,
-        }),
-      }
-    );
+    const response = await fetch(`/api/employee/allowance/edit-allowance`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        allowanceId: id,
+        allowanceTitle: allowanceTitleEdit,
+        amount: allowanceAmountEdit,
+        activeStatus: allowanceIsActiveEdit,
+      }),
+    });
 
     if (response.ok) {
       setIsAllowanceEditModalOpen(false);
@@ -301,7 +292,7 @@ const EmployeeDetails: React.FC = () => {
 
       const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
       const response = await fetch(
-        `${baseUrl}/api/employee/allowance/delete-allowance/${id}`,
+        `/api/employee/allowance/delete-allowance/${id}`,
         {
           method: "DELETE",
         }
@@ -331,21 +322,18 @@ const EmployeeDetails: React.FC = () => {
   const handleEditDeduction = async (id: number) => {
     setModelLoading(true);
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-    const response = await fetch(
-      `${baseUrl}/api/employee/deduction/edit-deduction`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          deductionId: id,
-          deductionTitle: deductionTitleEdit,
-          amount: deductionAmountEdit,
-          activeStatus: deductionIsActiveEdit,
-        }),
-      }
-    );
+    const response = await fetch(`/api/employee/deduction/edit-deduction`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        deductionId: id,
+        deductionTitle: deductionTitleEdit,
+        amount: deductionAmountEdit,
+        activeStatus: deductionIsActiveEdit,
+      }),
+    });
 
     if (response.ok) {
       setIsDeductionEditModalOpen(false);
@@ -383,7 +371,7 @@ const EmployeeDetails: React.FC = () => {
 
       const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
       const response = await fetch(
-        `${baseUrl}/api/employee/deduction/delete-deduction/${id}`,
+        `/api/employee/deduction/delete-deduction/${id}`,
         {
           method: "DELETE",
         }

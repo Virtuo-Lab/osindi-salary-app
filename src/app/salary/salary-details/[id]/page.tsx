@@ -20,7 +20,7 @@ const SalaryDetails: React.FC = () => {
     const fetchSalary = async () => {
       const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
       const id = window.location.pathname.split("/").pop();
-      const response = await fetch(`${baseUrl}/api/salary/get-salary/${id}`);
+      const response = await fetch(`/api/salary/get-salary/${id}`);
       const data = await response.json();
       setSalary(data);
       setLoading(false);
