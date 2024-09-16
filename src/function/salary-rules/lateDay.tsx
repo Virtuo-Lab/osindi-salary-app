@@ -143,7 +143,23 @@ export async function lateDay(
 
     console.log(shiftStart, dutyOn);
 
-    if (dutyOn > shiftStart) {
+    //check working time is smaller than 4 hours
+    const workingTime = (dutyOn.getTime() - shiftStart.getTime()) / 60000; // Difference in minutes
+
+    if (workingTime < 240) {
+      // Less than 4 hours (240 minutes)
+      lateDays2++;
+      let additionalOTHoursBeforeRound = workingTime / 60; // Convert minutes to hours
+      additionalOTHoursBeforeRound =
+        Math.floor(additionalOTHoursBeforeRound * 2) / 2; // Round to previous 0.5 hours
+      additionalOT += additionalOTHoursBeforeRound;
+    } else if (workingTime < 360) {
+      lateDays1++;
+      let additionalOTHoursBeforeRound = workingTime / 60; // Convert minutes to hours
+      additionalOTHoursBeforeRound =
+        Math.floor(additionalOTHoursBeforeRound * 2) / 2; // Round to previous 0.5 hours
+      additionalOT += additionalOTHoursBeforeRound;
+    } else if (dutyOn > shiftStart) {
       const diff = (dutyOn.getTime() - shiftStart.getTime()) / 60000; // Difference in minutes
 
       if (diff > 300) {
