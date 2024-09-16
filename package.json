@@ -1,0 +1,46 @@
+{
+  "name": "osindi-salary-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@t3-oss/env-nextjs": "^0.7.1",
+    "@types/xlsx": "^0.0.36",
+    "drizzle-kit": "^0.24.0",
+    "drizzle-orm": "^0.33.0",
+    "framer-motion": "^11.3.24",
+    "next": "14.2.5",
+    "pdf-lib": "^1.17.1",
+    "pg": "^8.11.3",
+    "postgres": "^3.4.4",
+    "react": "^18",
+    "react-datepicker": "^7.3.0",
+    "react-dom": "^18",
+    "react-icons": "^5.3.0",
+    "react-router-dom": "^6.26.1",
+    "react-spinners": "^0.14.1",
+    "sweetalert2": "^11.12.4",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/lodash.mergewith": "^4.6.9",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
