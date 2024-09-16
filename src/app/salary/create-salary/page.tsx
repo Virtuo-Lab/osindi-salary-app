@@ -23,12 +23,18 @@ import {
   ModalFooter,
   Input,
   useDisclosure,
+  Stack,
+  Text,
+  Flex,
+  Spinner,
 } from "@chakra-ui/react";
 import Loading from "@/components/Loading";
 import Swal from "sweetalert2";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Employee } from "@/db/schema";
+import { clear } from "console";
+import { set } from "react-datepicker/dist/date_utils";
 
 type EmployeeSalary = {
   attendanceId: number;
@@ -41,6 +47,7 @@ type EmployeeSalary = {
 export default function CreateSalary() {
   const [employeeSalary, setEmployeeSalary] = useState<EmployeeSalary[]>([]);
   const [loading, setLoading] = useState(true);
+  const [specialDataLoading, setSpecialDataLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [specialData, setSpecialData] = useState({
     advance: "",
@@ -247,6 +254,15 @@ export default function CreateSalary() {
         });
         return;
       }
+      onClose();
+      Swal.fire({
+        title: "Adding special data...",
+        text: "Please wait while adding special data",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
 
       const data = {
         ...specialData,
@@ -295,6 +311,8 @@ export default function CreateSalary() {
     year: number
   ) => {
     try {
+      setSpecialDataLoading(true);
+
       const response = await fetch("/api/attendence/get-special-data", {
         method: "PUT",
         headers: {
@@ -312,9 +330,11 @@ export default function CreateSalary() {
         setSpecialData({
           advance: data.Advance,
           holidayOfWeek: data.LeaveDay,
-          specialLeavedays: data.SpecialLeaveDay.map(
-            (date: string) => new Date(date)
-          ),
+
+          specialLeavedays:
+            data.SpecialLeaveDay[0] != "NULL"
+              ? data.SpecialLeaveDay.map((date: string) => new Date(date))
+              : [],
         });
 
         console.log(data);
@@ -325,6 +345,7 @@ export default function CreateSalary() {
           icon: "error",
         });
       }
+      setSpecialDataLoading(false);
     } catch (error) {
       Swal.fire({
         title: "Failed to get special data",
@@ -332,6 +353,14 @@ export default function CreateSalary() {
         icon: "error",
       });
     }
+  };
+
+  const clearSpecialData = () => {
+    setSpecialData({
+      advance: "",
+      holidayOfWeek: "",
+      specialLeavedays: [],
+    });
   };
 
   return (
@@ -381,7 +410,7 @@ export default function CreateSalary() {
                       <Td>
                         <div>
                           <Button
-                            margin={2}
+                            marginRight={2}
                             colorScheme="teal"
                             size="sm"
                             onClick={(e) =>
@@ -397,6 +426,7 @@ export default function CreateSalary() {
                             Create Salary
                           </Button>
                           <Button
+                            marginRight={2}
                             colorScheme="red"
                             size="sm"
                             onClick={(e) =>
@@ -422,6 +452,7 @@ export default function CreateSalary() {
                                 item.month,
                                 item.year
                               );
+                              clearSpecialData();
                               onOpen();
                             }}
                           >
@@ -441,75 +472,125 @@ export default function CreateSalary() {
       {/* Modal for adding special attendance data */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Add Special Attendance Data</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            {selectedEmployee && (
-              <>
-                <p>Employee ID: {selectedEmployee.employeeId}</p>
-                <p>Employee Name: {selectedEmployee.employeeName}</p>
-                <p>Month: {selectedEmployee.month}</p>
-                <p>Year: {selectedEmployee.year}</p>
-              </>
-            )}
+        {specialDataLoading ? (
+          <ModalContent>
+            <ModalBody>
+              <Flex
+                justifyContent="center"
+                alignItems="center"
+                minHeight="200px"
+              >
+                <Spinner size="xl" thickness="4px" color="teal.400" />
+                <Text ml={4} fontSize="lg">
+                  Loading special data...
+                </Text>
+              </Flex>
+            </ModalBody>
+          </ModalContent>
+        ) : (
+          <ModalContent>
+            <ModalHeader>Add Special Attendance Data</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              {selectedEmployee && (
+                <Box
+                  mb={6}
+                  p={4}
+                  borderWidth="1px"
+                  borderRadius="lg"
+                  bg="gray.50"
+                >
+                  <p>
+                    <strong>Employee ID:</strong> {selectedEmployee.employeeId}
+                  </p>
+                  <p>
+                    <strong>Employee Name:</strong>{" "}
+                    {selectedEmployee.employeeName}
+                  </p>
+                  <p>
+                    <strong>Month:</strong> {selectedEmployee.month}
+                  </p>
+                  <p>
+                    <strong>Year:</strong> {selectedEmployee.year}
+                  </p>
+                </Box>
+              )}
+              <Stack spacing={4}>
+                <Input
+                  placeholder="Advance"
+                  name="advance"
+                  value={specialData.advance}
+                  onChange={handleSpecialDataChange}
+                  size="lg"
+                  focusBorderColor="teal.400"
+                />
+                <Input
+                  placeholder="Holiday of Week"
+                  name="holidayOfWeek"
+                  value={specialData.holidayOfWeek}
+                  onChange={handleSpecialDataChange}
+                  size="lg"
+                  focusBorderColor="teal.400"
+                />
+                <Box>
+                  <DatePicker
+                    selected={null}
+                    onChange={handleDateChange}
+                    filterDate={(date) => {
+                      if (selectedEmployee) {
+                        const currentMonth = selectedEmployee.month;
+                        const currentYear = selectedEmployee.year;
+                        return (
+                          date.getMonth() + 1 === currentMonth &&
+                          date.getFullYear() === currentYear
+                        );
+                      }
+                      return false;
+                    }}
+                    placeholderText="Select a date"
+                    className="chakra-datepicker"
+                  />
+                </Box>
+              </Stack>
 
-            <Input
-              placeholder="Advance"
-              name="advance"
-              value={specialData.advance}
-              onChange={handleSpecialDataChange}
-            />
-            <Input
-              placeholder="Holiday of Week"
-              name="holidayOfWeek"
-              value={specialData.holidayOfWeek}
-              onChange={handleSpecialDataChange}
-            />
-
-            <div className="mt-4">
-              <DatePicker
-                selected={null}
-                onChange={handleDateChange}
-                filterDate={(date) => {
-                  if (selectedEmployee) {
-                    const currentMonth = selectedEmployee.month;
-                    const currentYear = selectedEmployee.year;
-                    return (
-                      date.getMonth() + 1 === currentMonth &&
-                      date.getFullYear() === currentYear
-                    );
-                  }
-                  return false;
-                }}
-                placeholderText="Select a date"
-              />
-              <div className="mt-4">
-                {specialData.specialLeavedays.map((date, index) => (
-                  <div key={index} className="flex items-center mb-2">
-                    <span>{date.toDateString()}</span>
-                    <Button
-                      colorScheme="red"
-                      size="sm"
-                      ml={2}
-                      onClick={() => handleRemoveDate(date)}
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleSpecialDataSubmit}>
-              Submit
-            </Button>
-            <Button variant="ghost" onClick={onClose}>
-              Cancel
-            </Button>
-          </ModalFooter>
-        </ModalContent>
+              <Box mt={6}>
+                <Text fontSize="lg" fontWeight="bold" mb={4}>
+                  Special Leave Days
+                </Text>
+                {specialData.specialLeavedays.length === 0 ? (
+                  <Text color="gray.500">No special leave days added.</Text>
+                ) : (
+                  specialData.specialLeavedays.map((date, index) => (
+                    <Flex key={index} alignItems="center" mb={2}>
+                      <Text>{date.toDateString()}</Text>
+                      <Button
+                        colorScheme="red"
+                        size="sm"
+                        ml={2}
+                        onClick={() => handleRemoveDate(date)}
+                        _hover={{ bg: "red.500" }}
+                      >
+                        Remove
+                      </Button>
+                    </Flex>
+                  ))
+                )}
+              </Box>
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                colorScheme="blue"
+                mr={3}
+                onClick={handleSpecialDataSubmit}
+              >
+                Submit
+              </Button>
+              <Button variant="ghost" onClick={onClose}>
+                Cancel
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        )}
       </Modal>
     </div>
   );

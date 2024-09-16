@@ -14,7 +14,11 @@ export async function PUT(req: NextRequest) {
         month: LeaveDay.month,
         year: LeaveDay.year,
         LeaveDay: LeaveDay.day,
-        SpecialLeaveDay: sql<string[]>`array_agg(${SpecialLeaveDay.date})`,
+        SpecialLeaveDay: sql<string[]>`
+      COALESCE(array_agg(${SpecialLeaveDay.date} 
+        ORDER BY ${SpecialLeaveDay.date} 
+        NULLS LAST), '{}')
+    `,
         Advance: Advance.amount,
       })
       .from(LeaveDay)

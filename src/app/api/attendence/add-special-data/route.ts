@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { Advance, LeaveDay, SpecialLeaveDay } from "@/db/schema";
+import { and, eq } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
   try {
@@ -44,6 +45,16 @@ export async function POST(req: NextRequest) {
           },
         });
 
+      //delete existing special leave days
+      await tx
+        .delete(SpecialLeaveDay)
+        .where(
+          and(
+            eq(SpecialLeaveDay.employeeId, data.employeeId),
+            eq(SpecialLeaveDay.month, data.month),
+            eq(SpecialLeaveDay.year, data.year)
+          )
+        );
       // Process Special Leave Days
       for (const specialLeaveDay of data.specialLeavedays) {
         const date = new Date(specialLeaveDay);
