@@ -136,10 +136,10 @@ export async function POST(req: NextRequest) {
   page.drawText(paySheetText, {
     x: paySheetX,
     y: paySheetY,
-    size: 18,
+    size: 14,
     font: boldFont,
     color: rgb(0, 0, 0),
-    lineHeight: 18,
+    lineHeight: 14,
   });
 
   const employeeNameText = employeeName[0].name;
@@ -149,10 +149,10 @@ export async function POST(req: NextRequest) {
   page.drawText(employeeNameText, {
     x: employeeNameX,
     y: employeeNameY,
-    size: 18,
+    size: 14,
     font: boldFont,
     color: rgb(0, 0, 0),
-    lineHeight: 18,
+    lineHeight: 14,
   });
 
   // Add salary details to the PDF
