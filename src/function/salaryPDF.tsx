@@ -1,14 +1,15 @@
 "use server";
-
-import { NextRequest, NextResponse } from "next/server";
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
-import { db } from "@/db";
 import { Salary, Employee, Allowance, Deduction, Advance } from "@/db/schema";
-import { eq, and } from "drizzle-orm";
+import { db } from "@/db";
+import { and, eq } from "drizzle-orm";
+import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 
-export async function POST(req: NextRequest) {
-  const { employeeId, month, year, index } = await req.json();
-
+export async function GeneratePDF(
+  employeeId: number,
+  month: number,
+  year: number,
+  index: number
+) {
   // Fetch salary details from the database
   const salaryDetails = await db
     .select({
@@ -86,10 +87,7 @@ export async function POST(req: NextRequest) {
     .where(eq(Employee.employeeId, employeeId));
 
   if (salaryDetails.length === 0) {
-    return NextResponse.json(
-      { error: "No salary details found." },
-      { status: 404 }
-    );
+    return null;
   }
 
   // Create a new PDF document
@@ -960,6 +958,5 @@ export async function POST(req: NextRequest) {
   const pdfBytes = await pdfDoc.save();
   const base64PDF = Buffer.from(pdfBytes).toString("base64");
 
-  // Return the PDF as a base64-encoded string
-  return NextResponse.json({ base64PDF });
+  return base64PDF;
 }

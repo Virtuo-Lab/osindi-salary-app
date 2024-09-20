@@ -185,6 +185,7 @@ export const Salary = pgTable(
     totalAllowance: doublePrecision("total_allowance").notNull(),
     totalDeduction: doublePrecision("total_deduction").notNull(),
     netSalary: doublePrecision("net_salary").notNull(),
+    isEmailSent: boolean("is_email_sent"),
   },
   (table) => ({
     employeeDateIdx: uniqueIndex("salary_employee_month_idx").on(
