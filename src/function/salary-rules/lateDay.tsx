@@ -140,14 +140,47 @@ export async function lateDay(
     );
     //const shiftStart = new Date(`${date}T${shiftStartTime}`);
     const dutyOn = new Date(dutyOnTime);
+    const dutyOff = new Date(detailsOfDays[i].dutyOffTime);
 
-    console.log(shiftStart, dutyOn);
+    // Check if duty off time is empty
+    if (detailsOfDays[i].dutyOffTime === "empty") {
+      continue;
+    }
 
-    if (dutyOn > shiftStart) {
+    //check working time is smaller than 4 hours
+    const workingTime = (dutyOff.getTime() - dutyOn.getTime()) / 60000; // Difference in minutes
+
+    console.log("Working time: ", workingTime);
+    if (workingTime < 240) {
+      // Less than 4 hours (240 minutes)
+      console.log(
+        "Less than 4 hours: ",
+        workingTime,
+        "Late Days 21: ",
+        lateDays2
+      );
+      lateDays2++;
+      let additionalOTHoursBeforeRound = workingTime / 60; // Convert minutes to hours
+      additionalOTHoursBeforeRound =
+        Math.floor(additionalOTHoursBeforeRound * 2) / 2; // Round to previous 0.5 hours
+      additionalOT += additionalOTHoursBeforeRound;
+    } else if (workingTime < 360) {
+      lateDays1++;
+      let additionalOTHoursBeforeRound = workingTime / 60; // Convert minutes to hours
+      additionalOTHoursBeforeRound =
+        Math.floor(additionalOTHoursBeforeRound * 2) / 2; // Round to previous 0.5 hours
+      additionalOT += additionalOTHoursBeforeRound;
+    } else if (dutyOn > shiftStart) {
       const diff = (dutyOn.getTime() - shiftStart.getTime()) / 60000; // Difference in minutes
 
       if (diff > 300) {
         // If late more than 4 hours
+        console.log(
+          "Late more than 4 hours: ",
+          diff,
+          "Late Days 22: ",
+          lateDays2
+        );
         lateDays2++;
         let additionalOTHoursBeforeRound = diff / 60; // Convert minutes to hours
         additionalOTHoursBeforeRound =

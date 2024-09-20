@@ -82,9 +82,12 @@ export async function POST(req: NextRequest) {
         employeeId: employeeId,
         month: month,
         year: year,
-        advance:
-          salaryOptions.find((feature) => feature.title === "Advance")
-            ?.amount || 0,
+        advance: parseFloat(
+          (
+            salaryOptions.find((feature) => feature.title === "Advance")
+              ?.amount || 0
+          ).toFixed(2)
+        ),
         otHours:
           salaryFeatures.find((feature) => feature.title === "OT Hours")
             ?.amount || 0,
@@ -117,41 +120,67 @@ export async function POST(req: NextRequest) {
         basicSalary:
           salaryOptions.find((options) => options.title === "Basic Salary")
             ?.amount || 0,
-        attendanceAllowance:
-          salaryOptions.find(
-            (options) => options.title === "Attendance Allowance"
-          )?.amount || 0,
+        attendanceAllowance: parseFloat(
+          (
+            salaryOptions.find(
+              (options) => options.title === "Attendance Allowance"
+            )?.amount || 0
+          ).toFixed(2)
+        ),
         allowance: AllowanceJsonObject,
         deduction: DeductionJsonObject,
-        otAmount:
-          salaryOptions.find((options) => options.title === "OT Amount")
-            ?.amount || 0,
-        doubleOtAmount:
-          salaryOptions.find((options) => options.title === "2OT Amount")
-            ?.amount || 0,
-        lateAmount:
-          salaryOptions.find((options) => options.title === "Late Day1 Amount")
-            ?.amount || 0,
-        late2Amount:
-          salaryOptions.find((options) => options.title === "Late Day2 Amount")
-            ?.amount || 0,
-        absentAmount:
-          salaryOptions.find((options) => options.title === "Absent Amount")
-            ?.amount || 0,
-        halfDayAmount:
-          salaryOptions.find((options) => options.title === "Half Day Amount")
-            ?.amount || 0,
-        workingHolidayAmount:
-          salaryOptions.find(
-            (options) => options.title === "Working Leave Day Amount"
-          )?.amount || 0,
+        otAmount: parseFloat(
+          (
+            salaryOptions.find((options) => options.title === "OT Amount")
+              ?.amount || 0
+          ).toFixed(2)
+        ),
+        doubleOtAmount: parseFloat(
+          (
+            salaryOptions.find((options) => options.title === "2OT Amount")
+              ?.amount || 0
+          ).toFixed(2)
+        ),
+        lateAmount: parseFloat(
+          (
+            salaryOptions.find(
+              (options) => options.title === "Late Day1 Amount"
+            )?.amount || 0
+          ).toFixed(2)
+        ),
+        late2Amount: parseFloat(
+          (
+            salaryOptions.find(
+              (options) => options.title === "Late Day2 Amount"
+            )?.amount || 0
+          ).toFixed(2)
+        ),
+        absentAmount: parseFloat(
+          (
+            salaryOptions.find((options) => options.title === "Absent Amount")
+              ?.amount || 0
+          ).toFixed(2)
+        ),
+        halfDayAmount: parseFloat(
+          (
+            salaryOptions.find((options) => options.title === "Half Day Amount")
+              ?.amount || 0
+          ).toFixed(2)
+        ),
+        workingHolidayAmount: parseFloat(
+          (
+            salaryOptions.find(
+              (options) => options.title === "Working Leave Day Amount"
+            )?.amount || 0
+          ).toFixed(2)
+        ),
         totalAllowance:
           salaryFeatures.find((feature) => feature.title === "Total Allowance")
             ?.amount || 0,
         totalDeduction:
           salaryFeatures.find((feature) => feature.title === "Total Deduction")
             ?.amount || 0,
-        netSalary: salary,
+        netSalary: parseFloat(salary.toFixed(2)),
       })
       .onConflictDoUpdate({
         target: [

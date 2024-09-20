@@ -20,6 +20,14 @@ const Header: React.FC = () => {
           <Button as={Link} href="/" colorScheme="teal" variant="solid">
             Home
           </Button>
+          <Button
+            as={Link}
+            href="/salary/create-salary"
+            colorScheme="teal"
+            variant="solid"
+          >
+            Create Salary
+          </Button>
           <Button as={Link} href="/employee" colorScheme="teal" variant="solid">
             Employee
           </Button>

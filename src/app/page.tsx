@@ -129,6 +129,63 @@ export default function Home() {
     }
   };
 
+  const handleSendEmail = async (
+    index: number,
+    employeeId: number,
+    month: number,
+    year: number,
+    e: any
+  ) => {
+    e.stopPropagation();
+
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You are about to send an email with the salary details.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, send email!",
+    });
+
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Sending email...",
+        text: "Please wait while we send the email.",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
+      try {
+        const response = await fetch(`/api/salary/send-email`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ index, employeeId, month, year }),
+        });
+
+        if (response.ok) {
+          Swal.fire({
+            title: "Email sent!",
+            text: "The salary details have been sent to the employee.",
+            icon: "success",
+          });
+        } else {
+          Swal.fire({
+            title: "Error!",
+            text: "Failed to send the email.",
+            icon: "error",
+          });
+        }
+      } catch (error) {
+        console.error("Failed to send email", error);
+      }
+    }
+  };
+
   return (
     <div>
       <Header />
@@ -208,6 +265,21 @@ export default function Home() {
                             }}
                           >
                             Delete
+                          </Button>
+                          <Button
+                            colorScheme="green"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleSendEmail(
+                                salary.index,
+                                salary.employeeId,
+                                salary.month,
+                                salary.year,
+                                e
+                              );
+                            }}
+                          >
+                            Send Email
                           </Button>
                         </Td>
                       </Tr>

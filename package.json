@@ -20,6 +20,7 @@
     "drizzle-orm": "^0.33.0",
     "framer-motion": "^11.3.24",
     "next": "14.2.5",
+    "nodemailer": "^6.9.15",
     "pdf-lib": "^1.17.1",
     "pg": "^8.11.3",
     "postgres": "^3.4.4",
@@ -35,6 +36,7 @@
   "devDependencies": {
     "@types/lodash.mergewith": "^4.6.9",
     "@types/node": "^20",
+    "@types/nodemailer": "^6.4.15",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",

@@ -117,9 +117,10 @@ export default function CreateSalary() {
         if (response.ok) {
           const newEmployeeSalary = employeeSalary.filter(
             (item) =>
-              item.employeeId !== employeeId &&
-              item.month !== month &&
-              item.year !== year
+              item.employeeId !== employeeId ||
+              item.month !== month ||
+              item.year !== year ||
+              item.attendanceId !== attendanceId
           );
           setEmployeeSalary(newEmployeeSalary);
 
