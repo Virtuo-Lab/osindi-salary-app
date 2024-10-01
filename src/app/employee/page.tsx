@@ -98,9 +98,6 @@ const EmployeeData: React.FC = () => {
           </div>
         </div>
         <Box p="4" borderWidth={1}>
-          <Heading size="md" className="mt-4 mb-4 flex justify-center">
-            Employee List
-          </Heading>
           <TableContainer>
             <Table variant="simple">
               <Thead>
@@ -111,7 +108,7 @@ const EmployeeData: React.FC = () => {
                   <Th>Contact</Th>
                   <Th>Duty On Time</Th>
                   <Th>Duty Off Time</Th>
-                  <Th>Actions</Th>
+                  <Th style={{ textAlign: "center" }}>Actions</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -121,15 +118,32 @@ const EmployeeData: React.FC = () => {
                     onClick={() =>
                       (window.location.href = `/employee/employee-details/${employee.employeeId}`)
                     }
-                    style={{ cursor: "pointer" }}
+                    style={{
+                      cursor: "pointer",
+                      fontSize: "0.875rem",
+                      height: "30px",
+                    }}
                   >
-                    <Td>{employee.employeeId}</Td>
-                    <Td>{employee.name}</Td>
-                    <Td>{employee.address}</Td>
-                    <Td>{employee.contact}</Td>
-                    <Td>{employee.dutyOnTime}</Td>
-                    <Td>{employee.dutyOffTime}</Td>
-                    <Td>
+                    <Td style={{ padding: "8px 30px" }}>
+                      {employee.employeeId}
+                    </Td>
+                    <Td style={{ padding: "8px 30px" }}>{employee.name}</Td>
+                    <Td style={{ padding: "8px 30px" }}>{employee.address}</Td>
+                    <Td style={{ padding: "8px 30px" }}>{employee.contact}</Td>
+                    <Td style={{ padding: "8px 30px" }}>
+                      {employee.dutyOnTime}
+                    </Td>
+                    <Td style={{ padding: "8px 30px" }}>
+                      {employee.dutyOffTime}
+                    </Td>
+                    <Td
+                      style={{
+                        padding: "8px 30px",
+                        display: "flex",
+                        gap: "4px",
+                        justifyContent: "center",
+                      }}
+                    >
                       <Button
                         colorScheme="red"
                         size="sm"

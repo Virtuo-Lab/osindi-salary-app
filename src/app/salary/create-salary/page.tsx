@@ -391,7 +391,7 @@ export default function CreateSalary() {
                     <Th>Employee Name</Th>
                     <Th>Month</Th>
                     <Th>Year</Th>
-                    <Th>Action</Th>
+                    <Th style={{ textAlign: "center" }}>Action</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -401,14 +401,29 @@ export default function CreateSalary() {
                       onClick={() =>
                         (window.location.href = `/salary/attendance-details/${item.employeeId}/${item.month}/${item.year}/${item.attendanceId}`)
                       }
-                      style={{ cursor: "pointer" }}
+                      style={{
+                        cursor: "pointer",
+                        fontSize: "0.875rem",
+                        height: "30px",
+                      }}
                     >
-                      <Td>{item.attendanceId}</Td>
-                      <Td>{item.employeeId}</Td>
-                      <Td>{item.employeeName}</Td>
-                      <Td>{item.month}</Td>
-                      <Td>{item.year}</Td>
-                      <Td>
+                      <Td style={{ padding: "8px 30px" }}>
+                        {item.attendanceId}
+                      </Td>
+                      <Td style={{ padding: "8px 30px" }}>{item.employeeId}</Td>
+                      <Td style={{ padding: "8px 30px" }}>
+                        {item.employeeName}
+                      </Td>
+                      <Td style={{ padding: "8px 30px" }}>{item.month}</Td>
+                      <Td style={{ padding: "8px 30px" }}>{item.year}</Td>
+                      <Td
+                        style={{
+                          padding: "8px 30px",
+                          display: "flex",
+                          gap: "4px",
+                          justifyContent: "center",
+                        }}
+                      >
                         <div>
                           <Button
                             marginRight={2}
