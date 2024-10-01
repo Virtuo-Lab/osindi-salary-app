@@ -11,7 +11,10 @@ import {
   Box,
   Heading,
   Button,
+  ButtonGroup,
   Link,
+  HStack,
+  Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Loading from "@/components/Loading";
@@ -30,16 +33,20 @@ export default function Home() {
     },
   ]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1); // Manage the current page
+  const [totalPages, setTotalPages] = useState(1); // Total number of pages
+  const recordsPerPage = 10; // Number of records per page
 
   useEffect(() => {
     const fetchSalaryData = async () => {
       try {
         console.log("Fetching salary data...");
-        const res = await fetch("/api/salary/get-salary-list", {
-          method: "GET",
-        });
+        const res = await fetch(
+          `/api/salary/get-salary-list?page=${currentPage}&limit=${recordsPerPage}`
+        );
         const data = await res.json();
         setSalaryData(data.salaryList);
+        setTotalPages(data.totalPages);
         setLoading(false);
       } catch (error) {
         console.error("Failed to fetch salary data", error);
@@ -47,7 +54,7 @@ export default function Home() {
     };
 
     fetchSalaryData();
-  }, []);
+  }, [currentPage]);
 
   const handlePrint = async (
     index: number,
@@ -186,6 +193,18 @@ export default function Home() {
     }
   };
 
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
     <div>
       <Header />
@@ -226,23 +245,38 @@ export default function Home() {
                         onClick={() =>
                           (window.location.href = `/salary/salary-details/${salary.index}`)
                         }
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          fontSize: "0.875rem",
+                          height: "30px",
+                        }} // Reduced font size
                       >
-                        <Td>{salary.index}</Td>
-                        <Td>{salary.employeeId}</Td>
-                        <Td>{salary.employeeName}</Td>
-                        <Td>{salary.year}</Td>
-                        <Td>{salary.month}</Td>
-                        <Td>{salary.otHours}</Td>
-                        <Td>{salary.netSalary}</Td>
+                        <Td style={{ padding: "8px 30px" }}>{salary.index}</Td>{" "}
+                        {/* Reduced padding */}
+                        <Td style={{ padding: "8px 30px" }}>
+                          {salary.employeeId}
+                        </Td>
+                        <Td style={{ padding: "8px 30px" }}>
+                          {salary.employeeName}
+                        </Td>
+                        <Td style={{ padding: "8px 30px" }}>{salary.year}</Td>
+                        <Td style={{ padding: "8px 30px" }}>{salary.month}</Td>
+                        <Td style={{ padding: "8px 30px" }}>
+                          {salary.otHours}
+                        </Td>
+                        <Td style={{ padding: "8px 30px" }}>
+                          {salary.netSalary}
+                        </Td>
                         <Td
                           style={{
                             display: "flex",
-                            gap: "8px",
+                            gap: "4px",
                             justifyContent: "center",
+                            padding: "8px", // Reduced padding
                           }}
                         >
                           <Button
+                            size="sm" // Reduced button size
                             colorScheme="blue"
                             onClick={(e) => {
                               e.stopPropagation();
@@ -258,6 +292,7 @@ export default function Home() {
                             Print
                           </Button>
                           <Button
+                            size="sm" // Reduced button size
                             colorScheme="red"
                             onClick={(e) => {
                               e.stopPropagation();
@@ -267,6 +302,7 @@ export default function Home() {
                             Delete
                           </Button>
                           <Button
+                            size="sm" // Reduced button size
                             colorScheme="green"
                             onClick={(e) => {
                               e.stopPropagation();
@@ -287,6 +323,26 @@ export default function Home() {
                   </Tbody>
                 </Table>
               </TableContainer>
+              {/* Pagination Controls */}
+              <HStack justifyContent="center" spacing={4} mt={4}>
+                <Button
+                  onClick={handlePreviousPage}
+                  isDisabled={currentPage === 1}
+                  colorScheme="teal"
+                >
+                  Previous
+                </Button>
+                <Text>
+                  Page {currentPage} of {totalPages}
+                </Text>
+                <Button
+                  onClick={handleNextPage}
+                  isDisabled={currentPage === totalPages}
+                  colorScheme="teal"
+                >
+                  Next
+                </Button>
+              </HStack>
             </Box>
           </div>
         </>
