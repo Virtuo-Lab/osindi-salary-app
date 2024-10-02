@@ -52,7 +52,10 @@ export async function PUT(req: NextRequest) {
         LeaveDay.day,
         Advance.amount
       );
-
+    if (result.length === 0) {
+      // Return 204 if no data found
+      return new NextResponse(null, { status: 204 });
+    }
     return NextResponse.json(result[0]);
 
     // Set the response

@@ -327,6 +327,11 @@ export default function CreateSalary() {
       });
 
       if (response.ok) {
+        setSpecialDataLoading(false);
+        //if 204 then return
+        if (response.status === 204) {
+          return;
+        }
         const data = await response.json();
         setSpecialData({
           advance: data.Advance,
