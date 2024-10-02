@@ -1,5 +1,6 @@
 "use client";
 
+import { Flex } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 // Adding required imports for Date Picker
 import DatePicker from "react-datepicker";
@@ -277,6 +278,16 @@ const ExcelFilePage: React.FC = () => {
   const displayedData = showAllRows ? filteredData : filteredData.slice(0, 10);
 
   const saveData = async () => {
+    //validate data is there
+    if (jsonData.length === 0) {
+      Swal.fire({
+        title: "No Data",
+        text: "No data to save",
+        icon: "warning",
+      });
+      return;
+    }
+
     try {
       const result = await Swal.fire({
         title: "Save Data",
@@ -313,9 +324,10 @@ const ExcelFilePage: React.FC = () => {
 
           window.location.href = "/salary/create-salary";
         } else {
+          const errorResponse = await response.json();
           Swal.fire({
             title: "Failed!",
-            text: "Failed to save data",
+            text: errorResponse.error || response.statusText,
             icon: "error",
           });
         }
@@ -539,9 +551,11 @@ const ExcelFilePage: React.FC = () => {
           </div>
         </Box>
       </div>
-      <Button mt={4} colorScheme="blue" onClick={saveData}>
-        Save All Data
-      </Button>
+      <Flex justifyContent="center" mt={4}>
+        <Button colorScheme="blue" onClick={saveData}>
+          Save All Data
+        </Button>
+      </Flex>
     </ChakraProvider>
   );
 };

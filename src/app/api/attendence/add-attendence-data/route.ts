@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { error: "Failed to insert data" },
+      { error: (error as Error).message },
       { status: 500 }
     );
   }
